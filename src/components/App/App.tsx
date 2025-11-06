@@ -1,21 +1,17 @@
 import { useState } from "react";
 
-import type { Votes } from "../../types/votes"
+import type { Votes, VoteType } from "../../types/votes"
 
 import css from "./App.module.css";
 
 import CafeInfo from "../CafeInfo/CafeInfo";
 import VoteOptions from "../VoteOptions/VoteOptions";
+import VoteStats from "../VoteStats/VoteStats";
+import Notification from "../Notification/Notification";
 
 
-type VoteType = 'good' | 'neutral' | 'bad';
 
 
-const votes: Votes = {
-	good: 0,
-	neutral: 0,
-	bad: 0
-}
 
 
 
@@ -28,16 +24,42 @@ const votes: Votes = {
 // Таким чином, votes буде центральним джерелом даних про голосування, а всі відповідні компоненти зможуть отримувати актуальні значення через пропси.
 
 
-
 function App() {
 
-  const [vote, setVote] = useState<Votes>(votes);
+  const [votes, setVotes] = useState<Votes>({
+    good: 0,
+    neutral: 0,
+    bad: 0
+  });
+
+  function handleVote(type: VoteType) {
+    setVotes((prev) => ({
+      ...prev,
+      [type]: prev[type] + 1
+    }))
+
+}
+
+  function resetVotes() {
+    setVotes({
+      good: 0,
+      neutral: 0,
+      bad: 0})
+
+}
+
 
 
   return (
     <div className={css.app}>
       <CafeInfo />
-      <VoteOptions/>
+      <VoteOptions
+        onVote={handleVote}
+        onReset={resetVotes}
+        canReset={totalVotes > 0}
+      />
+      {}
+      {/* <Notification /> */}
     </div>
 
   )
