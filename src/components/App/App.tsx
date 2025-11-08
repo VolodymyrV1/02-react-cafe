@@ -11,19 +11,6 @@ import Notification from "../Notification/Notification";
 
 
 
-
-
-
-
-// Додай у App функції для роботи зі станом:
-
-// handleVote(type) – для оновлення стану голосів. Використовуй тип VoteType для типізації її параметра.
-// resetVotes() – для скидання стану.
-
-
-// Таким чином, votes буде центральним джерелом даних про голосування, а всі відповідні компоненти зможуть отримувати актуальні значення через пропси.
-
-
 function App() {
 
   const [votes, setVotes] = useState<Votes>({
@@ -48,6 +35,13 @@ function App() {
 
 }
 
+const totalVotes = votes.good + votes.neutral + votes.bad;
+const positiveRate = totalVotes
+    ? Math.round((votes.good / totalVotes) * 100)
+    : 0;
+
+
+
 
 
   return (
@@ -58,8 +52,15 @@ function App() {
         onReset={resetVotes}
         canReset={totalVotes > 0}
       />
-      {}
-      {/* <Notification /> */}
+
+      {totalVotes > 0 ? <VoteStats 
+      votes={votes}
+      totalVotes={totalVotes}
+      positiveRate={positiveRate}/> : 
+      <Notification />}
+      
+      
+      
     </div>
 
   )
